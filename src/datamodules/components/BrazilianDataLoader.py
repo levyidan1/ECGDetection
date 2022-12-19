@@ -1,6 +1,4 @@
 from torch.utils.data import Dataset
-import numpy as np
-import cv2
 import h5py
 
 def extract_labels_from_csv(labels_file):

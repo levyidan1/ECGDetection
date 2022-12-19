@@ -14,3 +14,5 @@ wandb:
   group: ""
   tags: []
   job_type: ""
+  project: "ECGDetection"
+  entity: "ecg-detection"
