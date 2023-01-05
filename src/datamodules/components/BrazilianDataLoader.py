@@ -1,6 +1,7 @@
 from torch.utils.data import Dataset
 import h5py
 
+
 def extract_labels_from_csv(labels_file):
     header = labels_file.readline().split(',')
     header = [x.strip() for x in header]
@@ -41,10 +42,11 @@ class BaseBrazilianDatabase(Dataset):
     def __getitem__(self, idx):
         pass
 
+
 class BrazilianImageDatabase(BaseBrazilianDatabase):
     def __init__(self, data_path, labels_path, classification_category='AF', number_of_images_to_load=None):
         self.stat_only = False
-        self.number_of_image_files = 80 #WIP. Currently only 533,000 images have been created. TODO: Change to 882 when all images are created.
+        self.number_of_image_files = 80  # WIP. Currently only 533,000 images have been created. TODO: Change to 882 when all images are created.
         self.number_of_images_to_load = number_of_images_to_load
         super().__init__(data_path, labels_path, classification_category)
 
@@ -97,11 +99,12 @@ class BrazilianImageDatabase(BaseBrazilianDatabase):
         if not hasattr(self, 'data'):
             self.__load_data__(self.data_path)
         image_file_idx = idx // 1000
-        number_of_images = 1000 if image_file_idx < 882 else 944 # a total of 882944 images. (TODO: Verify when all images are created)
+        number_of_images = 1000 if image_file_idx < 882 else 944  # a total of 882944 images. (TODO: Verify when all images are created)
         classification_ = self.__get_classification__(idx)
         if self.stat_only:
             return 0, classification_
-        img = self.data[image_file_idx][idx % number_of_images]  # len(self.data[image_file_idx]) should be 85000. batch 10 (11th) has 32944 images
+        img = self.data[image_file_idx][
+            idx % number_of_images]  # len(self.data[image_file_idx]) should be 85000. batch 10 (11th) has 32944 images
         return img, classification_
 
     def set_statistics_only(self, stat_only=False):

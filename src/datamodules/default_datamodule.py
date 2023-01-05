@@ -2,15 +2,14 @@ from typing import Any, Dict, Optional, Tuple
 
 import torch
 from pytorch_lightning import LightningDataModule
-from torch.utils.data import ConcatDataset, DataLoader, Dataset, random_split
-from torchvision.datasets import MNIST
+from torch.utils.data import DataLoader, Dataset, random_split
 from torchvision.transforms import transforms
 
-from src.datamodules.components.BrazilianDataLoader import BrazilianImageDatabase
+from Datasets.Datasets import Brazilian_Dataset
 
 
-class BRDataModule(LightningDataModule):
-    """LightningDataModule for BR dataset.
+class DefaultDataModule(LightningDataModule):
+    """LightningDataModule for a default dataset.
 
     A DataModule implements 5 key methods:
 
@@ -44,9 +43,10 @@ class BRDataModule(LightningDataModule):
             batch_size: int = 64,
             num_workers: int = 0,
             pin_memory: bool = False,
-            total_images = 0,
-            data_path = None,
-            classification_category = None,
+            total_images=0,
+            data_path=None,
+            classification_path=None,
+            classification_category=None,
     ):
         super().__init__()
 
@@ -75,10 +75,10 @@ class BRDataModule(LightningDataModule):
         """
         # load and split datasets only if not loaded already
         if not self.data_train and not self.data_val and not self.data_test:
-            dataset = \
-                BrazilianImageDatabase(self.hparams.data_path, self.hparams.data_path, self.hparams.classification_category,
-                                       number_of_images_to_load=int(self.hparams.total_images))
-        if not self.data_train and not self.data_val and not self.data_test:
+            dataset =  \
+                Brazilian_Dataset(classification_category=self.hparams.classification_category,
+                                           classification_path=self.hparams.classification_path,
+                                           database_path=self.hparams.data_path)
             self.data_train, self.data_val, self.data_test = random_split(
                 dataset=dataset,
                 lengths=self.hparams.train_val_test_split,
@@ -131,6 +131,6 @@ if __name__ == "__main__":
     import pyrootutils
 
     root = pyrootutils.setup_root(__file__, pythonpath=True)
-    cfg = omegaconf.OmegaConf.load(root / "configs" / "datamodule" / "br.yaml")
+    cfg = omegaconf.OmegaConf.load(root / "configs" / "datamodule" / "default.yaml")
     cfg.data_dir = str(root / "data")
     _ = hydra.utils.instantiate(cfg)

@@ -1,10 +1,12 @@
 _target_: src.datamodules.br_datamodule.BRDataModule
 data_dir: ${paths.data_dir}
 batch_size: 50
-total_images: 80,000
-train_val_test_split: [63_000, 6_000, 11_000]
+#total_images: 80000
+#train_val_test_split: [63_000, 6_000, 11_000]
+total_images: 233
+train_val_test_split: [200, 16, 17]
 num_workers: 0
 pin_memory: False
 #data_path: '/mnt/qnap/idanlevy/data/brazilian/clean_images/'
-data_path: '/Users/idanlevy/Documents/medpic/brazilian database/data/'
+data_path: '/Users/idanlevy/Documents/medpic/brazilian database/data/images/'
 classification_category: 'AF'
