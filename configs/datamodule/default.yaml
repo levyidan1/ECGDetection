@@ -6,7 +6,7 @@ num_workers: 0
 pin_memory: False
 total_images: 288
 dataset:
-    _target_: src.datamodules.components.Datasets.BrazilianDataset
-    classification_category: 'Atrial fibrillation'
+    _target_: src.datamodules.components.Datasets.Brazilian_Dataset
+    classification_category: 'Atrial Fibrillation'
     classification_path: '/Users/idanlevy/Documents/medpic/brazilian database/data/images/labels.csv'
     database_path: '/Users/idanlevy/Documents/medpic/brazilian database/data/images/'
