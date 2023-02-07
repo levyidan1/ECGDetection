@@ -5,7 +5,7 @@
 
 defaults:
   - override /datamodule: default.yaml
-  - override /model: default.yaml
+  - override /model: cnn.yaml
   - override /callbacks: default.yaml
   - override /trainer: default.yaml
 
@@ -25,12 +25,10 @@ model:
   optimizer:
     lr: 0.002
   net:
-    lin1_size: 128
-    lin2_size: 256
-    lin3_size: 64
+    num_classes: 2
 
 datamodule:
-  batch_size: 50
+  batch_size: 1
 
 logger:
   wandb:

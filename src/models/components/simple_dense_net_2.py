@@ -4,11 +4,11 @@ from torch import nn
 class SimpleDenseNet(nn.Module):
     def __init__(
         self,
-        input_size: int = 784,
+        input_size: int = 4356000,
         lin1_size: int = 256,
         lin2_size: int = 256,
         lin3_size: int = 256,
-        output_size: int = 10,
+        output_size: int = 2,
     ):
         super().__init__()
 
@@ -26,14 +26,12 @@ class SimpleDenseNet(nn.Module):
         )
 
     def forward(self, x):
-        batch_size, channels, width, height = x.size()
-        print(f'batch_size: {batch_size}, channels: {channels}, width: {width}, height: {height}')
+        print(f'x.shape: {x.shape}')
+        batch_size, channels, height, width = x.size()
 
-        # (batch, 1, width, height) -> (batch, 1*width*height)
+        # (batch, 3, height, width) -> (batch, 3*height*width)
         x = x.view(batch_size, -1)
-        print(f'input shape: {x.shape}')
-        print(f'input 0: {x[0]}')
-        print(f'input 0 shape: {x[0].shape}')
+        x = x.to(self.model[0].weight.dtype)
 
         return self.model(x)
 

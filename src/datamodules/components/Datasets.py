@@ -1,5 +1,6 @@
 import itertools
 import pandas as pd
+import torch
 from torch.utils.data import Dataset
 import torchvision.transforms as T
 import numpy as np
@@ -260,6 +261,9 @@ class Brazilian_Dataset(Source_Dataset):
             img = self.Scale_image(img)
             if self.to_equalize_hist:
                 img = self.Normalize_image(img)
+
+            img = torch.from_numpy(img.astype(np.float32))
+            classification_ = torch.tensor(classification_, dtype=torch.long)
             sample = (img, classification_)
         else:
             sample = (0, classification_)
