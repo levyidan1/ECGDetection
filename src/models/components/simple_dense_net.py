@@ -27,9 +27,16 @@ class SimpleDenseNet(nn.Module):
 
     def forward(self, x):
         batch_size, channels, width, height = x.size()
+        print(f"batch_size: {batch_size}, channels: {channels}, width: {width}, height: {height}")
+        exit(0)
 
         # (batch, 1, width, height) -> (batch, 1*width*height)
         x = x.view(batch_size, -1)
+
+        # log shape of input:
+        print(f"input shape: {x.shape}")
+        print(f"input 0: {x[0]}")
+        exit(0)
 
         return self.model(x)
 

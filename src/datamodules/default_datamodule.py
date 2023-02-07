@@ -5,8 +5,6 @@ from pytorch_lightning import LightningDataModule
 from torch.utils.data import DataLoader, Dataset, random_split
 from torchvision.transforms import transforms
 
-from Datasets.Datasets import Brazilian_Dataset
-
 
 class DefaultDataModule(LightningDataModule):
     """LightningDataModule for a default dataset.
@@ -47,6 +45,7 @@ class DefaultDataModule(LightningDataModule):
             data_path=None,
             classification_path=None,
             classification_category=None,
+            dataset=None,
     ):
         super().__init__()
 
@@ -75,10 +74,7 @@ class DefaultDataModule(LightningDataModule):
         """
         # load and split datasets only if not loaded already
         if not self.data_train and not self.data_val and not self.data_test:
-            dataset =  \
-                Brazilian_Dataset(classification_category=self.hparams.classification_category,
-                                           classification_path=self.hparams.classification_path,
-                                           database_path=self.hparams.data_path)
+            dataset = self.hparams.dataset
             self.data_train, self.data_val, self.data_test = random_split(
                 dataset=dataset,
                 lengths=self.hparams.train_val_test_split,

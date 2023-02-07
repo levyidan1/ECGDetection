@@ -2,17 +2,17 @@ from torch.utils.data import Dataset
 import torchvision.transforms as T
 import numpy as np
 import matplotlib.pyplot as plt
-# import configparser
-# import os
-# from os import listdir
-# from os.path import isfile, join
-# import csv
-# import cv2
-# from PIL import Image
-#
-# config = configparser.ConfigParser()
-# path_ = os.path.dirname(os.path.abspath(__file__))
-# config.read(f'{path_}/config.ini')
+import configparser
+import os
+from os import listdir
+from os.path import isfile, join
+import csv
+import cv2
+from PIL import Image
+
+config = configparser.ConfigParser()
+path_ = os.path.dirname(os.path.abspath(__file__))
+config.read(f'{path_}/config.ini')
 
 
 class Generic_Dataset(Dataset):

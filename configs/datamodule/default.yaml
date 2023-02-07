@@ -1,10 +1,12 @@
 _target_: src.datamodules.default_datamodule.DefaultDataModule
 data_dir: ${paths.data_dir}
-train_val_test_split: [200, 16, 17]
+train_val_test_split: [247, 21, 20]
 batch_size: 50
 num_workers: 0
 pin_memory: False
-total_images: 233
-data_path: '/Users/idanlevy/Documents/medpic/brazilian database/data/images/'
-classification_path: '/Users/idanlevy/Documents/medpic/brazilian database/data/images/labels.csv'
-classification_category: 'AF'
+total_images: 288
+dataset:
+    _target_: src.datamodules.components.Datasets.BrazilianDataset
+    classification_category: 'Atrial fibrillation'
+    classification_path: '/Users/idanlevy/Documents/medpic/brazilian database/data/images/labels.csv'
+    database_path: '/Users/idanlevy/Documents/medpic/brazilian database/data/images/'
