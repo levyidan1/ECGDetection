@@ -41,7 +41,6 @@ class DefaultDataModule(LightningDataModule):
             batch_size: int = 64,
             num_workers: int = 0,
             pin_memory: bool = False,
-            total_images=0,
             data_path=None,
             classification_path=None,
             classification_category=None,

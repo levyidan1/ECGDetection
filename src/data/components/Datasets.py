@@ -4,7 +4,7 @@ import torch
 from torch.utils.data import Dataset
 import torchvision.transforms as T
 import numpy as np
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import configparser
 import os
 from os import listdir
@@ -116,18 +116,18 @@ class Source_Dataset(Generic_Dataset):
 
 class NY_Dataset(Source_Dataset):
     # NY Dataset
-    def __init__(self, to_cut_image=True, classification_category=None, num_images_to_load=1000, **kwargs):
+    def __init__(self, to_cut_image=True, classification_category=None, classification_path=None, database_path=None, num_images_to_load=1000, **kwargs):
         super().__init__(**kwargs)
         self.dataset_name = 'NY'
         self.all_possible_categories = []
         if classification_category is not None:
             self.classification_category = classification_category
-        self.database_path = config['Image_database_path']['Images_Path']
+        self.database_path = database_path
         self.files_in_database = os.listdir(self.database_path)
         self.files_in_database = [i for i in self.files_in_database if i.endswith('.png')]
         # self.files_in_database = self.files_in_database[:num_images_to_load]
-        self.classification_path = config['Image_database_path']['Classification_Path']
-        self.server_db_path = config['Server_storage_path']['Server_Path']
+        self.classification_path = classification_path
+        # self.server_db_path = config['Server_storage_path']['Server_Path']
         if self.stat_only == False:
             self.classifications = self.upload_classifications()
         self.to_cut_image = to_cut_image
@@ -159,6 +159,8 @@ class NY_Dataset(Source_Dataset):
                 img = self.NY_db_image_upload(index)
             if self.to_equalize_hist:
                 img = self.Normalize_image(img)
+            img = torch.from_numpy(img.astype(np.float32))
+            classification_ = torch.tensor(classification_, dtype=torch.long)
             return (img, classification_)
         except:
             print(f'Problematic index : {index}')
@@ -416,12 +418,12 @@ class Physionet_Dataset(Source_Dataset):
     # The categories used are the scored categories that are shared between all sub-datasets.
     # The categories are defined by the categories_mapping_scored dictionary
     # https://github.com/physionetchallenges/evaluation-2021/blob/main/dx_mapping_scored.csv
-    def __init__(self, dataset_name, classification_category=None, ecg_format=0, **kwargs):
+    def __init__(self, dataset_name, classification_category=None, ecg_format=0, classification_path=None, database_path=None, **kwargs):
         super().__init__(**kwargs)
         self.dataset_name = dataset_name
         self.categories_mapping = CategoriesMapping()
-        self.classification_path = config['Physionet_2021_dataset']['Classification_Path']
-        self.database_path = config['Physionet_2021_dataset']['Images_Path']
+        self.classification_path = classification_path
+        self.database_path = database_path
         # check if ecg_format is str or int:
         if isinstance(ecg_format, str):
             self.database_path = self.database_path + '_format_' + ecg_format
@@ -483,6 +485,8 @@ class Physionet_Dataset(Source_Dataset):
         img = self.Scale_image(img)
         if self.to_equalize_hist:
             img = self.Normalize_image(img)
+        img = torch.from_numpy(img.astype(np.float32))
+        classification_ = torch.tensor(classification_, dtype=torch.long)
         return img, classification_
 
     def upload_classifications(self):
@@ -814,13 +818,13 @@ class Combined_Dataset(Source_Dataset):
 
 class Format_Physionet_Dataset(Source_Dataset):
     # A combined physionet dataset of ecg_format as defined
-    def __init__(self, ecg_format=0, start_index=None, end_index=None, **kwargs):
+    def __init__(self, ecg_format=0, classification_category=None, start_index=None, end_index=None, classification_path=None, database_path=None, **kwargs):
         super().__init__(**kwargs)
-
+        self.classification_category=classification_category
         physionet_subsets = [CPSC_Dataset, CPSC_Extra_Dataset, PTB_Dataset, PTB_XL_Dataset, Georgia_Dataset,
                              Chapman_Shaoxing_Dataset, Ningbo_Dataset]
         datasets = [*physionet_subsets]
-        self.datasets_list = [dataset(ecg_format=ecg_format, **kwargs) for dataset in datasets]
+        self.datasets_list = [dataset(ecg_format=ecg_format, classification_category=classification_category, classification_path=classification_path, database_path=database_path, **kwargs) for dataset in datasets]
         self.start_index = start_index
         self.end_index = end_index
         self.calc_stat()

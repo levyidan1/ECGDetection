@@ -3,8 +3,8 @@ data_dir: ${paths.data_dir}
 train_val_test_split: [247, 21, 20]
 batch_size: 16
 num_workers: 10
-pin_memory: True
-total_images: 288
+pin_memory: False
+#total_images: 288
 dataset:
     _target_: src.data.components.Datasets.Brazilian_Dataset
     classification_category: 'Atrial Fibrillation'
