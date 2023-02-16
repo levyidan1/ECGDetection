@@ -2,26 +2,20 @@
 
 # Lightning-Hydra-Template
 
-[![python](https://img.shields.io/badge/-Python_3.7_%7C_3.8_%7C_3.9_%7C_3.10-blue?logo=python&logoColor=white)](https://github.com/pre-commit/pre-commit)
-[![pytorch](https://img.shields.io/badge/PyTorch_1.8+-ee4c2c?logo=pytorch&logoColor=white)](https://pytorch.org/get-started/locally/)
-[![lightning](https://img.shields.io/badge/-Lightning_1.6+-792ee5?logo=pytorchlightning&logoColor=white)](https://pytorchlightning.ai/)
-[![hydra](https://img.shields.io/badge/Config-Hydra_1.2-89b8cd)](https://hydra.cc/)
+[![python](https://img.shields.io/badge/-Python_3.8_%7C_3.9_%7C_3.10-blue?logo=python&logoColor=white)](https://github.com/pre-commit/pre-commit)
+[![pytorch](https://img.shields.io/badge/PyTorch_1.10+-ee4c2c?logo=pytorch&logoColor=white)](https://pytorch.org/get-started/locally/)
+[![lightning](https://img.shields.io/badge/-Lightning_1.9+-792ee5?logo=pytorchlightning&logoColor=white)](https://pytorchlightning.ai/)
+[![hydra](https://img.shields.io/badge/Config-Hydra_1.3-89b8cd)](https://hydra.cc/)
 [![black](https://img.shields.io/badge/Code%20Style-Black-black.svg?labelColor=gray)](https://black.readthedocs.io/en/stable/)
-[![pre-commit](https://img.shields.io/badge/Pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
+[![isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/) <br>
 [![tests](https://github.com/ashleve/lightning-hydra-template/actions/workflows/test.yml/badge.svg)](https://github.com/ashleve/lightning-hydra-template/actions/workflows/test.yml)
-[![codecov](https://codecov.io/gh/ashleve/lightning-hydra-template/branch/main/graph/badge.svg)](https://codecov.io/gh/ashleve/lightning-hydra-template)
 [![code-quality](https://github.com/ashleve/lightning-hydra-template/actions/workflows/code-quality-main.yaml/badge.svg)](https://github.com/ashleve/lightning-hydra-template/actions/workflows/code-quality-main.yaml)
+[![codecov](https://codecov.io/gh/ashleve/lightning-hydra-template/branch/main/graph/badge.svg)](https://codecov.io/gh/ashleve/lightning-hydra-template) <br>
 [![license](https://img.shields.io/badge/License-MIT-green.svg?labelColor=gray)](https://github.com/ashleve/lightning-hydra-template#license)
+[![PRs](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/ashleve/lightning-hydra-template/pulls)
 [![contributors](https://img.shields.io/github/contributors/ashleve/lightning-hydra-template.svg)](https://github.com/ashleve/lightning-hydra-template/graphs/contributors)
 
-<!-- <a href="https://www.python.org/"><img alt="Python" src="https://img.shields.io/badge/-Python 3.7+-blue?style=for-the-badge&logo=python&logoColor=white"></a> -->
-
-<!-- <a href="https://pytorch.org/get-started/locally/"><img alt="PyTorch" src="https://img.shields.io/badge/-PyTorch 1.8+-ee4c2c?style=for-the-badge&logo=pytorch&logoColor=white"></a>
-<a href="https://pytorchlightning.ai/"><img alt="Lightning" src="https://img.shields.io/badge/-Lightning 1.6+-792ee5?style=for-the-badge&logo=pytorchlightning&logoColor=white"></a>
-<a href="https://hydra.cc/"><img alt="Config: hydra" src="https://img.shields.io/badge/config-hydra 1.2-89b8cd?style=for-the-badge&labelColor=gray"></a>
-<a href="https://black.readthedocs.io/en/stable/"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-black.svg?style=for-the-badge&labelColor=gray"></a> -->
-
-A clean and scalable template to kickstart your deep learning project 🚀⚡🔥<br>
+A clean template to kickstart your deep learning project 🚀⚡🔥<br>
 Click on [<kbd>Use this template</kbd>](https://github.com/ashleve/lightning-hydra-template/generate) to initialize new repository.
 
 _Suggestions are always welcome!_
@@ -32,46 +26,31 @@ _Suggestions are always welcome!_
 
 ## 📌  Introduction
 
-**Why you should use it:**
+**Why you might want to use it:**
 
-- Convenient all-in-one technology stack for deep learning prototyping - allows you to rapidly iterate over new models, datasets and tasks on different hardware accelerators like CPUs, multi-GPUs or TPUs.
-- A collection of best practices for efficient workflow and reproducibility.
-- Thoroughly commented - you can use this repo as a reference and educational resource.
+✅ Speed <br>
+Rapidly iterate over models, datasets, tasks and experiments on different accelerators like multi-GPUs or TPUs.
 
-**Why you shouldn't use it:**
+✅ Education <br>
+Thoroughly commented. You can use this repo as a learning resource.
 
-- Lightning and Hydra are still evolving and integrate many libraries, which means sometimes things break - for the list of currently known problems visit [this page](https://github.com/ashleve/lightning-hydra-template/labels/bug).
-- Template is not really adjusted for data science and building data pipelines that depend on each other (it's much more useful for model prototyping on ready-to-use data).
-- The configuration setup is built with simple lightning training in mind (you might need to put some effort to adjust it for different use cases, e.g. lightning lite).
-- Limits you as much as pytorch lightning limits you.
+✅ Reusability <br>
+Collection of useful MLOps tools, configs, and code snippets. You can use this repo as a reference for various utilities.
 
-_\*keep in mind this is unofficial community project_
+**Why you might not want to use it:**
+
+❌ Things break from time to time <br>
+Lightning and Hydra are still evolving and integrate many libraries, which means sometimes things break. For the list of currently known problems visit [this page](https://github.com/ashleve/lightning-hydra-template/labels/bug).
+
+❌ Not adjusted for data engineering <br>
+Template is not really adjusted for building data pipelines that depend on each other. It's more efficient to use it for model prototyping on ready-to-use data.
+
+❌ Overfitted to simple use case <br>
+The configuration setup is built with simple lightning training in mind. You might need to put some effort to adjust it for different use cases, e.g. lightning lite.
+
+> **Note**: _Keep in mind this is unofficial community project._
 
 <br>
-
-<!-- ## Table Of Contents
-
-- [📌&nbsp;&nbsp;Introduction](#introduction)
-- [Main Technologies](#main-technologies)
-- [Main Ideas Of This Template](#main-ideas-of-this-template)
-- [Project Structure](#project-structure)
-- [🚀&nbsp;&nbsp;Quickstart](#quickstart)
-- [⚡&nbsp;&nbsp;Your Superpowers](#your-superpowers)
-- [❤️&nbsp;&nbsp;Contributions](#️contributions)
-- [How It Works](#how-it-works)
-- [Main Config](#main-config)
-- [Experiment Config](#experiment-config)
-- [Workflow](#workflow)
-- [Logs](#logs)
-- [Experiment Tracking](#experiment-tracking)
-- [Tests](#tests)
-- [Hyperparameter Search](#hyperparameter-search)
-- [Continuous Integration](#continuous-integration)
-- [Distributed Training](#distributed-training)
-- [Best Practices](#best-practices)
-- [Resources](#resources)
-
-<br> -->
 
 ## Main Technologies
 
@@ -81,20 +60,19 @@ _\*keep in mind this is unofficial community project_
 
 <br>
 
-## Main Ideas Of This Template
+## Main Ideas
 
-- **Predefined Structure**: clean and scalable so that work can easily be extended [# Project Structure](#project-structure)
-- **Rapid Experimentation**: thanks to hydra command line superpowers | [# Your Superpowers](#your-superpowers)
-- **Little Boilerplate**: thanks to automating pipelines with config instantiation | [# How It Works](#how-it-works)
-- **Main Configs**: specify default training configuration | [# Main Config](#main-config)
-- **Experiment Configs**: override chosen hyperparameters | [# Experiment Config](#experiment-config)
-- **Workflow**: comes down to 4 simple steps | [# Workflow](#workflow)
-- **Experiment Tracking**: Tensorboard, W&B, Neptune, Comet, MLFlow and CSVLogger | [# Experiment Tracking](#experiment-tracking)
-- **Logs**: all logs (checkpoints, configs, etc.) are stored in a dynamically generated folder structure | [# Logs](#logs)
-- **Hyperparameter Search**: made easier with Hydra plugins like Optuna Sweeper | [# Hyperparameter Search](#hyperparameter-search)
-- **Tests**: generic, easy-to-adapt tests for speeding up the development | [# Tests](#tests)
-- **Continuous Integration**: automatically test your repo with Github Actions | [# Continuous Integration](#continuous-integration)
-- **Best Practices**: a couple of recommended tools, practices and standards | [# Best Practices](#best-practices)
+- [**Rapid Experimentation**](#your-superpowers): thanks to hydra command line superpowers
+- [**Minimal Boilerplate**](#how-it-works): thanks to automating pipelines with config instantiation
+- [**Main Configs**](#main-config): allow you to specify default training configuration
+- [**Experiment Configs**](#experiment-config): allow you to override chosen hyperparameters and version control experiments
+- [**Workflow**](#workflow): comes down to 4 simple steps
+- [**Experiment Tracking**](#experiment-tracking): Tensorboard, W&B, Neptune, Comet, MLFlow and CSVLogger
+- [**Logs**](#logs): all logs (checkpoints, configs, etc.) are stored in a dynamically generated folder structure
+- [**Hyperparameter Search**](#hyperparameter-search): simple search is effortless with Hydra plugins like Optuna Sweeper
+- [**Tests**](#tests): generic, easy-to-adapt smoke tests for speeding up the development
+- [**Continuous Integration**](#continuous-integration): automatically test and lint your repo with Github Actions
+- [**Best Practices**](#best-practices): a couple of recommended tools, practices and standards
 
 <br>
 
@@ -103,9 +81,11 @@ _\*keep in mind this is unofficial community project_
 The directory structure of new project looks like this:
 
 ```
-├── configs                   <- Hydra configuration files
+├── .github                   <- Github Actions workflows
+│
+├── configs                   <- Hydra configs
 │   ├── callbacks                <- Callbacks configs
-│   ├── datamodule               <- Datamodule configs
+│   ├── data                     <- Data configs
 │   ├── debug                    <- Debugging configs
 │   ├── experiment               <- Experiment configs
 │   ├── extras                   <- Extra utilities configs
@@ -131,8 +111,8 @@ The directory structure of new project looks like this:
 ├── scripts                <- Shell scripts
 │
 ├── src                    <- Source code
-│   ├── datamodules              <- Lightning datamodules
-│   ├── models                   <- Lightning models
+│   ├── data                     <- Data scripts
+│   ├── models                   <- Model scripts
 │   ├── utils                    <- Utility scripts
 │   │
 │   ├── eval.py                  <- Run evaluation
@@ -143,6 +123,7 @@ The directory structure of new project looks like this:
 ├── .env.example              <- Example of file for storing private environment variables
 ├── .gitignore                <- List of files ignored by git
 ├── .pre-commit-config.yaml   <- Configuration of pre-commit hooks for code formatting
+├── .project-root             <- File for inferring the position of project root directory
 ├── Makefile                  <- Makefile with commands like `make train` or `make test`
 ├── pyproject.toml            <- Configuration options for testing and linting
 ├── requirements.txt          <- File for installing python dependencies
@@ -379,7 +360,7 @@ python eval.py ckpt_path="/path/to/ckpt/name.ckpt"
 ```bash
 # this will run 6 experiments one after the other,
 # each with different combination of batch_size and learning rate
-python train.py -m datamodule.batch_size=32,64,128 model.lr=0.001,0.0005
+python train.py -m data.batch_size=32,64,128 model.lr=0.001,0.0005
 ```
 
 > **Note**: Hydra composes configs lazily at job launch time. If you change code or configs after launching a job/sweep, the final composed configs might be impacted.
@@ -480,6 +461,8 @@ Each experiment should be tagged in order to easily filter them across files or 
 python train.py tags=["mnist","experiment_X"]
 ```
 
+> **Note**: You might need to escape the bracket characters in your shell with `python train.py tags=\["mnist","experiment_X"\]`.
+
 If no tags are provided, you will be asked to input them from command line:
 
 ```bash
@@ -503,6 +486,10 @@ ValueError: Specify tags before launching a multirun!
 <br>
 
 ## ❤️  Contributions
+
+This project exists thanks to all the people who contribute.
+
+![Contributors](https://readme-contributors.now.sh/ashleve/lightning-hydra-template?extension=jpg&width=400&aspectRatio=1)
 
 Have a question? Found a bug? Missing a specific feature? Feel free to file a new issue, discussion or PR with respective title and description.
 
@@ -562,7 +549,7 @@ It determines how config is composed when simply executing command `python train
 # order of defaults determines the order in which configs override each other
 defaults:
   - _self_
-  - datamodule: mnist.yaml
+  - data: mnist.yaml
   - model: mnist.yaml
   - callbacks: default.yaml
   - logger: null # set logger here or use command line (e.g. `python train.py logger=csv`)
@@ -629,7 +616,7 @@ For example, you can use them to version control best hyperparameters for each c
 # python train.py experiment=example
 
 defaults:
-  - override /datamodule: mnist.yaml
+  - override /data: mnist.yaml
   - override /model: mnist.yaml
   - override /callbacks: default.yaml
   - override /trainer: default.yaml
@@ -654,7 +641,7 @@ model:
     lin2_size: 256
     lin3_size: 64
 
-datamodule:
+data:
   batch_size: 64
 
 logger:
@@ -672,7 +659,7 @@ logger:
 **Basic workflow**
 
 1. Write your PyTorch Lightning module (see [models/mnist_module.py](src/models/mnist_module.py) for example)
-2. Write your PyTorch Lightning datamodule (see [datamodules/mnist_datamodule.py](src/datamodules/mnist_datamodule.py) for example)
+2. Write your PyTorch Lightning datamodule (see [data/mnist_datamodule.py](src/data/mnist_datamodule.py) for example)
 3. Write your experiment config, containing paths to model and datamodule
 4. Run training with chosen experiment config:
    ```bash
@@ -686,7 +673,7 @@ _Say you want to execute many runs to plot how accuracy changes in respect to ba
 1. Execute the runs with some config parameter that allows you to identify them easily, like tags:
 
    ```bash
-   python train.py -m logger=csv datamodule.batch_size=16,32,64,128 tags=["batch_size_exp"]
+   python train.py -m logger=csv data.batch_size=16,32,64,128 tags=["batch_size_exp"]
    ```
 
 2. Write a script or notebook that searches over the `logs/` folder and retrieves csv logs from runs containing given tags in config. Plot the results.
@@ -814,7 +801,7 @@ hydra:
     # define hyperparameter search space
     params:
       model.optimizer.lr: interval(0.0001, 0.1)
-      datamodule.batch_size: choice(32, 64, 128, 256)
+      data.batch_size: choice(32, 64, 128, 256)
       model.net.lin1_size: choice(64, 128, 256)
       model.net.lin2_size: choice(64, 128, 256)
       model.net.lin3_size: choice(32, 64, 128, 256)
@@ -842,8 +829,6 @@ Template comes with CI workflows implemented in Github Actions:
 - `.github/workflows/code-quality-main.yaml`: running pre-commits on main branch for all files
 - `.github/workflows/code-quality-pr.yaml`: running pre-commits on pull requests for modified files only
 
-> **Note**: You need to enable the GitHub Actions from the settings in your repository.
-
 <br>
 
 ## Distributed Training
@@ -866,7 +851,7 @@ The simplest way is to pass datamodule attribute directly to model on initializa
 
 ```python
 # ./src/train.py
-datamodule = hydra.utils.instantiate(config.datamodule)
+datamodule = hydra.utils.instantiate(config.data)
 model = hydra.utils.instantiate(config.model, some_param=datamodule.some_param)
 ```
 
@@ -876,7 +861,7 @@ Similarly, you can pass a whole datamodule config as an init parameter:
 
 ```python
 # ./src/train.py
-model = hydra.utils.instantiate(config.model, dm_conf=config.datamodule, _recursive_=False)
+model = hydra.utils.instantiate(config.model, dm_conf=config.data, _recursive_=False)
 ```
 
 You can also pass a datamodule config parameter to your model through variable interpolation:
@@ -885,7 +870,7 @@ You can also pass a datamodule config parameter to your model through variable i
 # ./configs/model/my_model.yaml
 _target_: src.models.my_module.MyLitModule
 lr: 0.01
-some_param: ${datamodule.some_param}
+some_param: ${data.some_param}
 ```
 
 Another approach is to access datamodule in LightningModule directly through Trainer:
@@ -905,8 +890,8 @@ def on_train_start(self):
 <details>
 <summary><b>Use Miniconda for GPU environments</b></summary>
 
-Use miniconda for your python environments (it's usually unnecessary to install full anaconda environment, miniconda should be enough).
-It makes it easier to install some dependencies, like cudatoolkit for GPU support. It also allows you to access your environments globally.
+It's usually unnecessary to install full anaconda environment, miniconda should be enough.
+It often makes it easier to install some dependencies, like cudatoolkit for GPU support. It also allows you to access your environments globally.
 
 Example installation:
 
@@ -918,7 +903,7 @@ bash Miniconda3-latest-Linux-x86_64.sh
 Create new conda environment:
 
 ```bash
-conda create -n myenv python=3.8
+conda create -n myenv python=3.10
 conda activate myenv
 ```
 
@@ -941,19 +926,6 @@ pre-commit install
 ```
 
 After that your code will be automatically reformatted on every new commit.
-
-Currently template contains configurations of:
-
-- **black** (python code formatting)
-- **isort** (python import sorting)
-- **pyupgrade** (upgrading python syntax to newer version)
-- **docformatter** (python docstring formatting)
-- **flake8** (python pep8 code analysis)
-- **prettier** (yaml formatting)
-- **nbstripout** (clearing output from jupyter notebooks)
-- **bandit** (python security linter)
-- **mdformat** (markdown formatting)
-- **codespell** (word spellling linter)
 
 To reformat all files in the project use command:
 
@@ -1139,7 +1111,7 @@ So any file can be easily imported into any other file like so:
 
 ```python
 from project_name.models.mnist_module import MNISTLitModule
-from project_name.datamodules.mnist_datamodule import MNISTDataModule
+from project_name.data.mnist_datamodule import MNISTDataModule
 ```
 
 </details>
@@ -1149,7 +1121,7 @@ from project_name.datamodules.mnist_datamodule import MNISTDataModule
 
 Some configurations are user/machine/installation specific (e.g. configuration of local cluster, or harddrive paths on a specific machine). For such scenarios, a file [configs/local/default.yaml](configs/local/) can be created which is automatically loaded but not tracked by Git.
 
-Example SLURM cluster config:
+For example, you can use it for a SLURM cluster config:
 
 ```yaml
 # @package _global_
@@ -1178,16 +1150,13 @@ hydra:
 
 This template was inspired by:
 
-- [PyTorchLightning/deep-learninig-project-template](https://github.com/PyTorchLightning/deep-learning-project-template)
+- [PyTorchLightning/deep-learning-project-template](https://github.com/PyTorchLightning/deep-learning-project-template)
 - [drivendata/cookiecutter-data-science](https://github.com/drivendata/cookiecutter-data-science)
 - [lucmos/nn-template](https://github.com/lucmos/nn-template)
 
 Other useful repositories:
 
 - [jxpress/lightning-hydra-template-vertex-ai](https://github.com/jxpress/lightning-hydra-template-vertex-ai) - lightning-hydra-template integration with Vertex AI hyperparameter tuning and custom training job
-- [pytorch/hydra-torch](https://github.com/pytorch/hydra-torch) - safely configuring PyTorch classes with Hydra
-- [romesco/hydra-lightning](https://github.com/romesco/hydra-lightning) - safely configuring PyTorch Lightning classes with Hydra
-- [PyTorchLightning/lightning-transformers](https://github.com/PyTorchLightning/lightning-transformers) - official Lightning Transformers repo built with Hydra
 
 </details>
 
@@ -1286,5 +1255,5 @@ python src/train.py experiment=experiment_name.yaml
 You can override any parameter from command line like this
 
 ```bash
-python src/train.py trainer.max_epochs=20 datamodule.batch_size=64
+python src/train.py trainer.max_epochs=20 data.batch_size=64
 ```

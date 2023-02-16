@@ -7,7 +7,7 @@ from typing import Any, Callable, Dict, List
 import hydra
 from omegaconf import DictConfig
 from pytorch_lightning import Callback
-from pytorch_lightning.loggers import LightningLoggerBase
+from pytorch_lightning.loggers import Logger
 from pytorch_lightning.utilities import rank_zero_only
 
 from src.utils import pylogger, rich_utils
@@ -110,9 +110,9 @@ def instantiate_callbacks(callbacks_cfg: DictConfig) -> List[Callback]:
     return callbacks
 
 
-def instantiate_loggers(logger_cfg: DictConfig) -> List[LightningLoggerBase]:
+def instantiate_loggers(logger_cfg: DictConfig) -> List[Logger]:
     """Instantiates loggers from config."""
-    logger: List[LightningLoggerBase] = []
+    logger: List[Logger] = []
 
     if not logger_cfg:
         log.warning("No logger configs found! Skipping...")
@@ -158,7 +158,7 @@ def log_hyperparameters(object_dict: dict) -> None:
         p.numel() for p in model.parameters() if not p.requires_grad
     )
 
-    hparams["datamodule"] = cfg["datamodule"]
+    hparams["data"] = cfg["data"]
     hparams["trainer"] = cfg["trainer"]
 
     hparams["callbacks"] = cfg.get("callbacks")
