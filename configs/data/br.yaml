@@ -1,4 +1,4 @@
-_target_: src.datamodules.br_datamodule.BRDataModule
+_target_: src.data.br_datamodule.BRDataModule
 data_dir: ${paths.data_dir}
 batch_size: 50
 #total_images: 80000

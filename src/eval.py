@@ -31,7 +31,7 @@ log = utils.get_pylogger(__name__)
 
 @utils.task_wrapper
 def evaluate(cfg: DictConfig) -> Tuple[dict, dict]:
-    """Evaluates given checkpoint on a datamodule testset.
+    """Evaluates given checkpoint on a data testset.
 
     This method is wrapped in optional @task_wrapper decorator which applies extra utilities
     before and after the call.
@@ -45,7 +45,7 @@ def evaluate(cfg: DictConfig) -> Tuple[dict, dict]:
 
     assert cfg.ckpt_path
 
-    log.info(f"Instantiating datamodule <{cfg.data._target_}>")
+    log.info(f"Instantiating data <{cfg.data._target_}>")
     datamodule: LightningDataModule = hydra.utils.instantiate(cfg.data)
 
     log.info(f"Instantiating model <{cfg.model._target_}>")

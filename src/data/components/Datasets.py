@@ -17,7 +17,7 @@ import wandb
 # import pyvips
 
 
-import src.datamodules.components.categories as categories
+import src.data.components.categories as categories
 
 config = configparser.ConfigParser()
 path_ = os.path.dirname(os.path.abspath(__file__))
