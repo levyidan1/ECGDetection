@@ -1,0 +1,13 @@
+_target_: src.data.ecg_datamodule_npz.ECGDataModule
+data_dir: ${paths.data_dir}/BR/
+train_val_test_split: [0.7, 0.15, 0.15]
+batch_size: 8
+num_workers: 10
+pin_memory: False
+classification_category: 'AF'
+#total_images: 288
+#dataset:
+#    _target_: src.data.components.Datasets.Brazilian_Dataset
+#    classification_category: 'Atrial Fibrillation'
+#    classification_path: '/Users/idanlevy/Documents/medpic/brazilian database/data/images/labels.csv'
+#    database_path: '/Users/idanlevy/Documents/medpic/brazilian database/data/images/'

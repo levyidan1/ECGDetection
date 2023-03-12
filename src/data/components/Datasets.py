@@ -4,7 +4,7 @@ import torch
 from torch.utils.data import Dataset
 import torchvision.transforms as T
 import numpy as np
-# import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 import configparser
 import os
 from os import listdir

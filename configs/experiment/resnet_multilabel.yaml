@@ -5,7 +5,7 @@
 
 defaults:
   - override /data: ecg.yaml
-  - override /model: resnet.yaml
+  - override /model: resnet_multilabel.yaml
   - override /callbacks: default.yaml
   - override /trainer: default.yaml
 
@@ -27,8 +27,8 @@ model:
   optimizer:
     lr: 0.002
 
-data:
-  batch_size: 8
+datamodule:
+  batch_size: 1
 
 logger:
   wandb:
