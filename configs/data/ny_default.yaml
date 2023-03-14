@@ -1,0 +1,12 @@
+_target_: src.data.ny_default_datamodule.DefaultDataModule
+data_dir: ${paths.data_dir}
+train_val_test_split: [0.7, 0.15, 0.15]
+batch_size: 8
+num_workers: 10
+pin_memory: False
+#total_images: 288
+dataset:
+    _target_: src.data.components.Datasets.NY_Dataset
+    classification_category: 'Atrial Fibrillation'
+    classification_path: '/Users/idanlevy/Documents/medpic/brazilian database/data/images/labels.csv'
+    database_path: '/Users/idanlevy/PycharmProjects/ECGDetection/data/NY'
