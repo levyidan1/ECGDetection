@@ -28,10 +28,22 @@ or add additional arguments to the `ECGDataset` class depending on the character
 class NYDataset(Dataset):
     def __init__(self, data_dir, csv_file, transform=None):
         self.data_dir = data_dir
-        #self.length is number of png files in data_dir, exculding the labels.csv file
         self.files_in_database = os.listdir(self.data_dir)
         self.files_in_database = [i for i in self.files_in_database if i.endswith('.png')]
-        self.csv_file = pd.read_csv(csv_file, index_col=0, on_bad_lines='skip')
+        # self.csv_file = pd.read_csv(csv_file, index_col=0, on_bad_lines='warn')
+        # coloumns: id	
+        self.csv_file = pd.read_csv(csv_file, index_col=0, dtype={'Dx1': str,
+                                                                  'Dx2': str,
+                                                                  'Dx3': str,
+                                                                  'Dx4': str,
+                                                                  'Dx5': str,
+                                                                  'Dx6': str,
+                                                                  'Dx7': str,
+                                                                  'Dx8': str,
+                                                                  'Dx9': str,
+                                                                  'Dx10': str,
+                                                                  'Dx11': str,
+                                                                  'Dx12': str,})
         self.transform = transform
 
     def __len__(self):
@@ -42,7 +54,11 @@ class NYDataset(Dataset):
         filename = self.csv_file.index[idx]
         image_path = os.path.join(self.data_dir, f"{filename}.png")
         image = Image.open(image_path)
-        label = torch.tensor(self.csv_file.iloc[idx]['Ventricular Rate'], dtype=torch.short)
+        if image.mode == 'RGBA':
+            # Convert RGBA to RGB format
+            image = image.convert('RGB')
+        ventricular_rate = self.csv_file.iloc[idx]['Ventricular Rate']
+        label = torch.tensor(ventricular_rate)
 
         if self.transform:
             image = self.transform(image)
@@ -53,7 +69,7 @@ class NYDataModule(LightningDataModule):
     def __init__(
             self,
             data_dir: str = "data/",
-            train_val_test_split: Tuple[int, int, int] = (62_000, 5_600, 11_626),
+            train_val_test_split: Tuple[int, int, int] = (62_000, 5_600, 11_636),
             batch_size: int = 64,
             num_workers: int = 0,
             pin_memory: bool = False,
@@ -77,8 +93,7 @@ class NYDataModule(LightningDataModule):
     def setup(self, stage=None):
         # load data, set variables, etc...
         ecg_dataset = NYDataset(self.data_dir, os.path.join(self.data_dir, "labels.csv"), transform=self.transform)
-        print(len(ecg_dataset))
-
+        
         train_size, val_size, test_size = self.train_val_test_split
         train_dataset, val_dataset, test_dataset = random_split(ecg_dataset, [train_size, val_size, test_size])
 

@@ -4,17 +4,17 @@ import torch
 import torchvision
 from pytorch_lightning import LightningModule
 from torchmetrics import MaxMetric, MeanMetric
-from torchmetrics.classification.accuracy import Accuracy
 from torchmetrics.classification.precision_recall import Precision, Recall
 from torchmetrics.classification.f_beta import F1Score
 from torchmetrics.classification.auroc import AUROC
 from torchmetrics.classification.stat_scores import StatScores
 from torchmetrics.classification.matthews_corrcoef import MulticlassMatthewsCorrCoef
 from torchmetrics.classification.confusion_matrix import ConfusionMatrix
+from torchmetrics.regression.mae import MeanAbsoluteError
 
 
 class ResNetVentricularRate(LightningModule):
-    """LightningModule for ECG classification that uses a ResNet.
+    """LightningModule for ECG ventricular rate prediction that uses a ResNet.
 
     A LightningModule organizes your PyTorch code into 6 sections:
         - Computations (init)
@@ -30,29 +30,30 @@ class ResNetVentricularRate(LightningModule):
 
     def __init__(self,
                  optimizer: torch.optim.Optimizer,
-                 scheduler: torch.optim.lr_scheduler,
-                 num_classes, lr, weight_decay, max_epochs=100):
+                 scheduler: torch.optim.lr_scheduler, num_classes, lr, weight_decay, max_epochs=100):
         super().__init__()
 
         # this line allows to access init params with 'self.hparams' attribute
         # also ensures init params will be stored in ckpt
         self.save_hyperparameters(logger=False, ignore=["net"])
 
-        # self.net = torchvision.models.resnet18(weights=None, num_classes=num_classes)
-        # self.net = torchvision.models.resnet152(weights=None, num_classes=num_classes)
-        # self.net = torchvision.models.densenet201(weights=None, num_classes=num_classes)
-        self.net = torchvision.models.resnext50_32x4d(weights=None, num_classes=num_classes)
-        linear_size = list(self.net.children())[-1].in_features
-        self.net.fc = torch.nn.Linear(linear_size, num_classes)
+        self.net = torchvision.models.resnet18(weights=None)
+        linear_size = list(self.net.children())[-1].in_features        
+        self.net.fc = torch.nn.Sequential(
+            torch.nn.Linear(linear_size, 256),
+            torch.nn.ReLU(inplace=True),
+            torch.nn.Dropout(0.4),
+            torch.nn.Linear(256, self.hparams.num_classes),
+            torch.nn.Softmax(dim=1),
+        )
 
         # loss function
-        self.criterion = torch.nn.BCEWithLogitsLoss()
-        # self.criterion = torch.nn.CrossEntropyLoss()
+        self.criterion = torch.nn.CrossEntropyLoss()
 
         # metric objects for calculating and averaging accuracy across batches
-        self.train_acc = Accuracy(task="binary", num_classes=2)
-        self.val_acc = Accuracy(task="binary", num_classes=2)
-        self.test_acc = Accuracy(task="binary", num_classes=2)
+        self.train_acc = MeanAbsoluteError()
+        self.val_acc = MeanAbsoluteError()
+        self.test_acc = MeanAbsoluteError()
 
         # for averaging loss across batches
         self.train_loss = MeanMetric()
@@ -60,37 +61,36 @@ class ResNetVentricularRate(LightningModule):
         self.test_loss = MeanMetric()
 
         # for averaging recall, precision and f1 across batches
-        self.train_recall = Recall(task="binary", num_classes=2, average="macro")
-        self.val_recall = Recall(task="binary", num_classes=2, average="macro")
-        self.test_recall = Recall(task="binary", num_classes=2, average="macro")
+        self.train_recall = MeanMetric()
+        self.val_recall = MeanMetric()
+        self.test_recall = MeanMetric()
 
-        self.train_precision = Precision(task="binary", num_classes=2, average="macro")
-        self.val_precision = Precision(task="binary", num_classes=2, average="macro")
-        self.test_precision = Precision(task="binary", num_classes=2, average="macro")
+        self.train_precision = MeanMetric()
+        self.val_precision = MeanMetric()
+        self.test_precision = MeanMetric()
 
-        self.train_f1 = F1Score(task="binary", num_classes=2, average="macro")
-        self.val_f1 = F1Score(task="binary", num_classes=2, average="macro")
-        self.test_f1 = F1Score(task="binary", num_classes=2, average="macro")
+        self.train_f1 = MeanMetric()
+        self.val_f1 = MeanMetric()
+        self.test_f1 = MeanMetric()
 
         # for averaging auroc across batches
-        self.train_auroc = AUROC(task="binary")
-        self.val_auroc = AUROC(task="binary")
-        self.test_auroc = AUROC(task="binary")
+        self.train_auroc = MeanMetric()
+        self.val_auroc = MeanMetric()
+        self.test_auroc = MeanMetric()
 
         # for averaging stat scores across batches
-        self.train_stat_scores = StatScores(task="binary")
-        self.val_stat_scores = StatScores(task="binary")
-        self.test_stat_scores = StatScores(task="binary")
+        self.train_stat_scores = MeanMetric()
+        self.val_stat_scores = MeanMetric()
+        self.test_stat_scores = MeanMetric()
 
         # for averaging matthews correlation coefficient across batches
-        self.train_mcc = MulticlassMatthewsCorrCoef(num_classes=2)
-        self.val_mcc = MulticlassMatthewsCorrCoef(num_classes=2)
-        self.test_mcc = MulticlassMatthewsCorrCoef(num_classes=2)
-
+        self.train_mcc = MeanMetric()
+        self.val_mcc = MeanMetric()
+        self.test_mcc = MeanMetric()
         # for averaging confusion matrix across batches
-        self.train_confusion_matrix = ConfusionMatrix(task="binary")
-        self.val_confusion_matrix = ConfusionMatrix(task="binary")
-        self.test_confusion_matrix = ConfusionMatrix(task="binary")
+        self.train_confusion_matrix = ConfusionMatrix(num_classes=self.hparams.num_classes, task="multiclass")
+        self.val_confusion_matrix = ConfusionMatrix(num_classes=self.hparams.num_classes, task="multiclass")
+        self.test_confusion_matrix = ConfusionMatrix(num_classes=self.hparams.num_classes, task="multiclass")
 
         # for tracking best so far validation accuracy
         self.val_acc_best = MaxMetric()
@@ -106,7 +106,9 @@ class ResNetVentricularRate(LightningModule):
     def step(self, batch: Any):
         x, y = batch
         logits = self.forward(x)
-        y_loss = torch.nn.functional.one_hot(y, num_classes=2).float().squeeze(1)
+        y = y.long()
+        # modify y_loss to map ventricular rate to its respective index
+        y_loss = torch.nn.functional.one_hot(y, num_classes=self.hparams.num_classes).float().squeeze(1)
         loss = self.criterion(logits, y_loss)
         preds = torch.argmax(logits, dim=1)
         return loss, preds, y.view(-1)
@@ -165,14 +167,12 @@ class ResNetVentricularRate(LightningModule):
         # self.log("val/stat_scores", self.val_stat_scores(preds, targets), on_step=False, on_epoch=True, prog_bar=True)
         self.log("val/mcc", self.val_mcc(preds, targets), on_step=False, on_epoch=True, prog_bar=True)
         # self.log("val/confusion_matrix", self.val_confusion_matrix(preds, targets), on_step=False, on_epoch=True, prog_bar=True)
-
         return {"loss": loss, "preds": preds, "targets": targets}
-
+    
     def validation_epoch_end(self, outputs: List[Any]):
+        # `outputs` is a list of dicts returned from `validation_step()`
         acc = self.val_acc.compute()  # get current val acc
         self.val_acc_best(acc)  # update best so far val acc
-        # log `val_acc_best` as a value through `.compute()` method, instead of as a metric object
-        # otherwise metric would be reset by lightning after each epoch
         self.log("val/acc_best", self.val_acc_best.compute(), prog_bar=True)
 
     def test_step(self, batch: Any, batch_idx: int):
