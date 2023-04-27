@@ -26,10 +26,12 @@ or add additional arguments to the `ECGDataset` class depending on the character
 
 
 class NYDataset(Dataset):
-    def __init__(self, data_dir, csv_file, transform=None):
+    def __init__(self, data_dir, csv_file, transform=None, label=None):
         self.data_dir = data_dir
         self.files_in_database = os.listdir(self.data_dir)
         self.files_in_database = [i for i in self.files_in_database if i.endswith('.png')]
+        self.files_in_database = sorted(self.files_in_database, key=lambda x: int(x.split('.')[0]))
+        self.label = label
         # self.csv_file = pd.read_csv(csv_file, index_col=0, on_bad_lines='warn')
         # coloumns: id	
         self.csv_file = pd.read_csv(csv_file, index_col=0, dtype={'Dx1': str,
@@ -44,25 +46,54 @@ class NYDataset(Dataset):
                                                                   'Dx10': str,
                                                                   'Dx11': str,
                                                                   'Dx12': str,})
+        self.labels = self.upload_labels()
         self.transform = transform
+
+    def upload_labels(self):
+        """Labels are in the form of a dictionary with filename as key and labels as value
+        """
+        labels = {}
+        for filename in self.files_in_database:
+            filename_without_extension = int(filename.split('.')[0])
+            current_labels = self.csv_file.loc[filename_without_extension][['Dx1',
+                                                      'Dx2',
+                                                      'Dx3',
+                                                      'Dx4',
+                                                      'Dx5',
+                                                      'Dx6',
+                                                      'Dx7',
+                                                      'Dx8',
+                                                      'Dx9',
+                                                      'Dx10',
+                                                      'Dx11',
+                                                      'Dx12']].values
+            if self.label is not None:
+                if self.label in current_labels:
+                    labels[filename_without_extension] = 1
+                else:
+                    labels[filename_without_extension] = 0
+            else:
+                labels[filename_without_extension] = current_labels
+        return labels
 
     def __len__(self):
         return len(self.files_in_database)
-        
 
     def __getitem__(self, idx):
-        filename = self.csv_file.index[idx]
-        image_path = os.path.join(self.data_dir, f"{filename}.png")
+        file_id = int(self.files_in_database[idx].split('.')[0])
+        image_path = os.path.join(self.data_dir, f"{file_id}.png")
         image = Image.open(image_path)
+        image = image.crop((0, 270, 1650, 1150))
         if image.mode == 'RGBA':
             # Convert RGBA to RGB format
             image = image.convert('RGB')
-        ventricular_rate = self.csv_file.iloc[idx]['Ventricular Rate']
-        label = torch.tensor(ventricular_rate)
 
+        ventricular_rate = self.csv_file.loc[file_id]['Ventricular Rate']
+        # label = torch.tensor(ventricular_rate)
+        labels = self.labels[file_id]
+        label = torch.tensor(labels)
         if self.transform:
             image = self.transform(image)
-
         return image, label
 
 class NYDataModule(LightningDataModule):
@@ -73,6 +104,7 @@ class NYDataModule(LightningDataModule):
             batch_size: int = 64,
             num_workers: int = 0,
             pin_memory: bool = False,
+            label: str = None,
     ):
         super().__init__()
         self.data_dir = data_dir
@@ -81,10 +113,12 @@ class NYDataModule(LightningDataModule):
         self.num_workers = num_workers
         self.pin_memory = pin_memory
         self.transform = T.Compose([
-            # T.Resize(224),
+            # # T.Resize(224),
             T.ToTensor(),
             # T.Normalize((0.5,), (0.5,))
+            
         ])
+        self.label = label
 
     def prepare_data(self):
         # download data, pre-process, split, save to disk, etc...
@@ -92,7 +126,7 @@ class NYDataModule(LightningDataModule):
 
     def setup(self, stage=None):
         # load data, set variables, etc...
-        ecg_dataset = NYDataset(self.data_dir, os.path.join(self.data_dir, "labels.csv"), transform=self.transform)
+        ecg_dataset = NYDataset(self.data_dir, os.path.join(self.data_dir, "labels.csv"), transform=self.transform, label=self.label)
         
         train_size, val_size, test_size = self.train_val_test_split
         train_dataset, val_dataset, test_dataset = random_split(ecg_dataset, [train_size, val_size, test_size])

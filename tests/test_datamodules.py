@@ -38,7 +38,8 @@ from src.data.ny_datamodule import NYDataset
 #     assert y.dtype == torch.int64
 
 @pytest.mark.parametrize("batch_size", [32, 128])
-def test_ny_datamodule(batch_size):
+@pytest.mark.skip(reason="Changed the datamodule")
+def test_ny_datamodule_ventricular_rate(batch_size):
     data_dir = "data/NY/"
     assert Path(data_dir).exists()
 
@@ -88,4 +89,34 @@ def test_ny_datamodule(batch_size):
 
 
 
-    
+@pytest.mark.parametrize("label", ["Atrial fibrillation"])#, "Ventricular tachycardia"])    
+def test_ny_datamodule_labels(label):
+    data_dir = "data/NY/"
+    assert Path(data_dir).exists()
+
+    dm = NYDataModule(data_dir=data_dir, label=label)
+
+    dm.setup()
+    assert dm.train_dataset and dm.val_dataset and dm.test_dataset
+    assert dm.train_dataloader() and dm.val_dataloader() and dm.test_dataloader()
+
+    num_datapoints = len(dm.train_dataset) + len(dm.val_dataset) + len(dm.test_dataset)
+    assert num_datapoints == 79_236
+
+    batch = next(iter(dm.train_dataloader()))
+    x, y = batch
+    assert x.dtype == torch.float32
+    assert y.dtype == torch.int64
+    assert x.shape == torch.Size([64, 3, 880, 1650])
+    assert y.shape == (64,)
+
+    dataset = NYDataset(data_dir, os.path.join(data_dir, "labels.csv"), label=label)
+    assert dataset[0][1] == 0
+    assert dataset[1][1] == 0
+    assert dataset[2][1] == 0
+
+    assert x[0] != dataset[0][0]
+
+    # Check index 209 which is file 18778:
+    assert dataset[209][1] == 1
+    assert Image.open(os.path.join(data_dir, f"{18778}.png")).convert('RGB').crop((0, 270, 1650, 1150)) == dataset[209][0]
