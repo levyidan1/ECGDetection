@@ -69,9 +69,9 @@ class NYDataset(Dataset):
                                                       'Dx12']].values
             if self.label is not None:
                 if self.label in current_labels:
-                    labels[filename_without_extension] = 1
+                    labels[filename_without_extension] = True
                 else:
-                    labels[filename_without_extension] = 0
+                    labels[filename_without_extension] = False
             else:
                 labels[filename_without_extension] = current_labels
         return labels
