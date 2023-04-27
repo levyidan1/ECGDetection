@@ -90,8 +90,8 @@ class NYDataset(Dataset):
 
         ventricular_rate = self.csv_file.loc[file_id]['Ventricular Rate']
         # label = torch.tensor(ventricular_rate)
-        labels = self.labels[file_id]
-        label = torch.tensor(labels)
+        label = self.labels[file_id]
+        # label = torch.tensor(labels)
         if self.transform:
             image = self.transform(image)
         return image, label
@@ -129,7 +129,7 @@ class NYDataModule(LightningDataModule):
         ecg_dataset = NYDataset(self.data_dir, os.path.join(self.data_dir, "labels.csv"), transform=self.transform, label=self.label)
         
         train_size, val_size, test_size = self.train_val_test_split
-        train_dataset, val_dataset, test_dataset = random_split(ecg_dataset, [train_size, val_size, test_size])
+        train_dataset, val_dataset, test_dataset = random_split(ecg_dataset, [train_size, val_size, test_size], generator=torch.Generator().manual_seed(42))
 
         self.train_dataset = train_dataset
         self.val_dataset = val_dataset
@@ -184,6 +184,6 @@ if __name__ == "__main__":
     import pyrootutils
 
     root = pyrootutils.setup_root(__file__, pythonpath=True)
-    cfg = omegaconf.OmegaConf.load(root / "configs" / "datamodule" / "default.yaml")
+    cfg = omegaconf.OmegaConf.load(root / "configs" / "datamodule" / "ny.yaml")
     cfg.data_dir = str(root / "data")
     _ = hydra.utils.instantiate(cfg)

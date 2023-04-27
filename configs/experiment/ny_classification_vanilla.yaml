@@ -4,10 +4,11 @@
 # python train.py experiment=ny_classification_vanillla
 
 defaults:
-  - override /data: ny_small.yaml
+  - override /data: ny.yaml
   - override /model: resnet.yaml
   - override /callbacks: default.yaml
   - override /trainer: default.yaml
+  - override /logger: wandb.yaml
 
 # all parameters below will be merged with parameters from default configurations set above
 # this allows you to overwrite only specified parameters
@@ -33,4 +34,5 @@ data:
 logger:
   wandb:
     tags: ${tags}
-    project: "ecg-detection-2"
+    entity: "ecg-detection"
+    project: "ECGDetection"
