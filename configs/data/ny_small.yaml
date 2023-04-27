@@ -1,6 +1,7 @@
 _target_: src.data.ny_datamodule.NYDataModule
-data_dir: ${paths.data_dir}/NY/
+data_dir: ${paths.data_dir}/NY_Small/
 train_val_test_split: [0.6, 0.2, 0.2]
 batch_size: 8
 num_workers: 10
 pin_memory: False
+label: "Atrial fibrillation"
