@@ -1,7 +1,7 @@
 from typing import Any, Dict, Optional, Tuple
 
 import torch
-from pytorch_lightning import LightningDataModule
+from lightning import LightningDataModule
 from torch.utils.data import DataLoader, Dataset, random_split
 import torchvision.transforms as T
 

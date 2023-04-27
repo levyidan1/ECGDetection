@@ -2,7 +2,7 @@ from typing import Any, List
 
 import torch
 import torchvision
-from pytorch_lightning import LightningModule
+from lightning import LightningModule
 from torchmetrics import MaxMetric, MeanMetric
 from torchmetrics.classification.accuracy import Accuracy
 from torchmetrics.classification.precision_recall import Precision, Recall
@@ -231,5 +231,5 @@ if __name__ == "__main__":
     import pyrootutils
 
     root = pyrootutils.setup_root(__file__, pythonpath=True)
-    cfg = omegaconf.OmegaConf.load(root / "configs" / "model" / "mnist.yaml")
+    cfg = omegaconf.OmegaConf.load(root / "configs" / "model" / "resnet.yaml")
     _ = hydra.utils.instantiate(cfg)
