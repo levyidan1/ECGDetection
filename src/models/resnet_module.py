@@ -103,7 +103,7 @@ class ResNet(LightningModule):
         # so we need to make sure val_acc_best doesn't store accuracy from these checks
         self.val_acc_best.reset()
 
-    def step(self, batch: Any):
+    def model_step(self, batch: Any):
         x, y = batch
         logits = self.forward(x)
         y_loss = torch.nn.functional.one_hot(y, num_classes=2).float().squeeze(1)
@@ -112,7 +112,7 @@ class ResNet(LightningModule):
         return loss, preds, y.view(-1)
 
     def training_step(self, batch: Any, batch_idx: int):
-        loss, preds, targets = self.step(batch)
+        loss, preds, targets = self.model_step(batch)
 
         # update and log metrics
         self.train_loss(loss)
@@ -139,12 +139,12 @@ class ResNet(LightningModule):
         # remember to always return loss from `training_step()` or backpropagation will fail!
         return {"loss": loss, "preds": preds, "targets": targets}
 
-    def training_epoch_end(self, outputs: List[Any]):
+    def on_training_epoch_end(self):
         # `outputs` is a list of dicts returned from `training_step()`
         pass
 
     def validation_step(self, batch: Any, batch_idx: int):
-        loss, preds, targets = self.step(batch)
+        loss, preds, targets = self.model_step(batch)
 
         # update and log metrics
         self.val_loss(loss)
@@ -168,7 +168,7 @@ class ResNet(LightningModule):
 
         return {"loss": loss, "preds": preds, "targets": targets}
 
-    def validation_epoch_end(self, outputs: List[Any]):
+    def on_validation_epoch_end(self):
         acc = self.val_acc.compute()  # get current val acc
         self.val_acc_best(acc)  # update best so far val acc
         # log `val_acc_best` as a value through `.compute()` method, instead of as a metric object
@@ -176,7 +176,7 @@ class ResNet(LightningModule):
         self.log("val/acc_best", self.val_acc_best.compute(), prog_bar=True)
 
     def test_step(self, batch: Any, batch_idx: int):
-        loss, preds, targets = self.step(batch)
+        loss, preds, targets = self.model_step(batch)
 
         # update and log metrics
         self.test_loss(loss)
@@ -200,7 +200,7 @@ class ResNet(LightningModule):
 
         return {"loss": loss, "preds": preds, "targets": targets}
 
-    def test_epoch_end(self, outputs: List[Any]):
+    def on_test_epoch_end(self):
         pass
 
     def configure_optimizers(self):
