@@ -69,9 +69,9 @@ class NYDataset(Dataset):
                                                       'Dx12']].values
             if self.label is not None:
                 if self.label in current_labels:
-                    labels[filename_without_extension] = True
+                    labels[filename_without_extension] = 1
                 else:
-                    labels[filename_without_extension] = False
+                    labels[filename_without_extension] = 0
             else:
                 labels[filename_without_extension] = current_labels
         return labels
@@ -129,7 +129,7 @@ class NYDataModule(LightningDataModule):
         ecg_dataset = NYDataset(self.data_dir, os.path.join(self.data_dir, "labels.csv"), transform=self.transform, label=self.label)
         
         train_size, val_size, test_size = self.train_val_test_split
-        train_dataset, val_dataset, test_dataset = random_split(ecg_dataset, [train_size, val_size, test_size], generator=torch.Generator().manual_seed(42))
+        train_dataset, val_dataset, test_dataset, _ = random_split(ecg_dataset, [train_size, val_size, test_size, 1- (train_size + val_size + test_size)], generator=torch.Generator().manual_seed(42))
 
         self.train_dataset = train_dataset
         self.val_dataset = val_dataset
